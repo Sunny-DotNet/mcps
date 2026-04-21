@@ -35,14 +35,6 @@
     "key": "github",
     "display_name": "GitHub",
     "logo": "https://cdn.simpleicons.org/github?viewbox=auto",
-    "description": "GitHub API 操作：仓库管理、Issue/PR 操作、代码搜索等",
-    "category": "dev-tools",
-    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/github"
-  },
-  {
-    "key": "github",
-    "display_name": "GitHub",
-    "logo": "https://cdn.simpleicons.org/github?viewbox=auto",
     "description": "Official GitHub MCP deployment options: remote hosted, Docker container, or local binary.",
     "category": "dev-tools",
     "homepage": "https://github.com/github/github-mcp-server"
