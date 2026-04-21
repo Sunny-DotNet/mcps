@@ -181,7 +181,9 @@
           if (item.homepage) {
             const link = document.createElement("a");
             link.href = item.homepage;
-            link.textContent = item.homepage;
+            link.textContent = "🔗";
+            link.title = item.homepage;
+            link.setAttribute("aria-label", `Open project page: ${item.display_name || item.key || "template"}`);
             link.target = "_blank";
             link.rel = "noopener noreferrer";
             homepageCell.appendChild(link);
