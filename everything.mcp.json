@@ -1,0 +1,36 @@
+{
+  "schema": "openstaff.mcp-template.v1",
+  "template_id": "builtin.everything.legacy",
+  "key": "everything",
+  "display_name": "Everything",
+  "description": "Windows 文件搜索工具（基于 Everything SDK）",
+  "category": "filesystem",
+  "icon": "search",
+  "logo": "https://cdn.simpleicons.org/everything?viewbox=auto",
+  "source": "builtin-current-seed",
+  "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/everything",
+  "match_hints": {
+    "name": "Everything",
+    "npm_package": "@modelcontextprotocol/server-everything",
+    "pypi_package": null
+  },
+  "profiles": [
+    {
+      "id": "package-npm",
+      "profile_type": "package",
+      "transport_type": "stdio",
+      "runner_kind": "package",
+      "runner": "npx",
+      "ecosystem": "npm",
+      "package_name": "@modelcontextprotocol/server-everything",
+      "package_version": "latest",
+      "command": "npx",
+      "args_template": [
+        "-y",
+        "@modelcontextprotocol/server-everything"
+      ],
+      "env_template": {}
+    }
+  ],
+  "parameter_schema": []
+}

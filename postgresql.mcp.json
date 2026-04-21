@@ -1,0 +1,46 @@
+{
+  "schema": "openstaff.mcp-template.v1",
+  "template_id": "builtin.postgresql.legacy",
+  "key": "postgresql",
+  "display_name": "PostgreSQL",
+  "description": "PostgreSQL 数据库操作：查询、Schema 分析",
+  "category": "database",
+  "icon": "database",
+  "logo": "https://cdn.simpleicons.org/postgresql?viewbox=auto",
+  "source": "builtin-current-seed",
+  "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/postgres",
+  "match_hints": {
+    "name": "PostgreSQL",
+    "npm_package": "@modelcontextprotocol/server-postgres",
+    "pypi_package": null
+  },
+  "profiles": [
+    {
+      "id": "package-npm",
+      "profile_type": "package",
+      "transport_type": "stdio",
+      "runner_kind": "package",
+      "runner": "npx",
+      "ecosystem": "npm",
+      "package_name": "@modelcontextprotocol/server-postgres",
+      "package_version": "latest",
+      "command": "npx",
+      "args_template": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "${param:connectionString}"
+      ],
+      "env_template": {}
+    }
+  ],
+  "parameter_schema": [
+    {
+      "key": "connectionString",
+      "label": "Connection String",
+      "type": "password",
+      "required": true,
+      "default_value": "postgresql://user:pass@localhost:5432/db",
+      "description": "PostgreSQL connection string. Treated as sensitive because it commonly contains credentials."
+    }
+  ]
+}

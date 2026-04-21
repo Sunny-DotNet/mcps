@@ -1,0 +1,148 @@
+{
+  "schema": "openstaff.mcp-template.v1",
+  "template_id": "official.github.current",
+  "key": "github",
+  "display_name": "GitHub",
+  "description": "Official GitHub MCP deployment options: remote hosted, Docker container, or local binary.",
+  "category": "dev-tools",
+  "icon": "github",
+  "logo": "https://cdn.simpleicons.org/github?viewbox=auto",
+  "source": "official-github-mcp",
+  "homepage": "https://github.com/github/github-mcp-server",
+  "match_hints": {
+    "name": "GitHub",
+    "npm_package": null,
+    "pypi_package": null
+  },
+  "profiles": [
+    {
+      "id": "remote",
+      "profile_type": "remote",
+      "transport_type": "http",
+      "runner_kind": "remote",
+      "runner": "remote",
+      "url_template": "${param:remoteUrl}",
+      "headers_template": {
+        "Authorization": "Bearer ${param:accessToken}",
+        "X-MCP-Readonly": "${param:readonly}"
+      }
+    },
+    {
+      "id": "container-docker",
+      "profile_type": "container",
+      "transport_type": "stdio",
+      "runner_kind": "container",
+      "runner": "docker",
+      "image": "ghcr.io/github/github-mcp-server",
+      "image_tag_template": "${param:imageTag}",
+      "command": "docker",
+      "args_template": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "-e",
+        "GITHUB_HOST",
+        "ghcr.io/github/github-mcp-server:${param:imageTag}"
+      ],
+      "env_template": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${param:accessToken}",
+        "GITHUB_HOST": "${param:githubHost}"
+      }
+    },
+    {
+      "id": "binary",
+      "profile_type": "binary",
+      "transport_type": "stdio",
+      "runner_kind": "binary",
+      "runner": "binary",
+      "command_template": "${param:binaryPath}",
+      "args_template": [
+        "stdio"
+      ],
+      "env_template": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${param:accessToken}",
+        "GITHUB_HOST": "${param:githubHost}"
+      },
+      "working_directory_template": "${param:workingDirectory}"
+    }
+  ],
+  "parameter_schema": [
+    {
+      "key": "accessToken",
+      "label": "GitHub Personal Access Token",
+      "type": "password",
+      "required": true,
+      "default_value": "",
+      "description": "PAT used by all GitHub MCP deployment modes."
+    },
+    {
+      "key": "remoteUrl",
+      "label": "Remote MCP URL",
+      "type": "string",
+      "required": true,
+      "default_value": "https://api.githubcopilot.com/mcp/",
+      "description": "Hosted GitHub MCP endpoint.",
+      "applies_to_profiles": [
+        "remote"
+      ]
+    },
+    {
+      "key": "readonly",
+      "label": "Read-only",
+      "type": "boolean",
+      "required": false,
+      "default_value": false,
+      "description": "When true, sends the read-only flag in remote mode.",
+      "applies_to_profiles": [
+        "remote"
+      ]
+    },
+    {
+      "key": "imageTag",
+      "label": "Docker Image Tag",
+      "type": "string",
+      "required": false,
+      "default_value": "latest",
+      "description": "Docker image tag for the local container runtime.",
+      "applies_to_profiles": [
+        "container-docker"
+      ]
+    },
+    {
+      "key": "githubHost",
+      "label": "GitHub Host",
+      "type": "string",
+      "required": false,
+      "default_value": "",
+      "description": "Optional GHES or ghe.com host, for example https://octocorp.ghe.com.",
+      "applies_to_profiles": [
+        "container-docker",
+        "binary"
+      ]
+    },
+    {
+      "key": "binaryPath",
+      "label": "Binary Path",
+      "type": "string",
+      "required": false,
+      "default_value": "C:\\Tools\\mcp\\github-mcp-server.exe",
+      "description": "Path to the locally installed github-mcp-server binary.",
+      "applies_to_profiles": [
+        "binary"
+      ]
+    },
+    {
+      "key": "workingDirectory",
+      "label": "Working Directory",
+      "type": "string",
+      "required": false,
+      "default_value": "${project.workspace}",
+      "description": "Working directory used when launching the local binary.",
+      "applies_to_profiles": [
+        "binary"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MCP Template Export - Docs</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0b0f14;
+      --panel: #121821;
+      --text: #e6edf3;
+      --muted: #9fb0c3;
+      --link: #58a6ff;
+      --border: #2d3748;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f7fafc;
+        --panel: #ffffff;
+        --text: #1a202c;
+        --muted: #4a5568;
+        --link: #1d4ed8;
+        --border: #e2e8f0;
+      }
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    h1, h2 {
+      margin: 0 0 10px;
+    }
+    p {
+      margin: 0 0 8px;
+      color: var(--muted);
+    }
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .lang-links, .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      margin-top: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      font-weight: 600;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: color-mix(in srgb, var(--panel), var(--border) 25%);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    .status {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="panel">
+      <h1>MCP Template Export (Demo)</h1>
+      <p>Browse multilingual documentation and all MCP template files from one page.</p>
+      <div class="lang-links">
+        <a href="../README.md">English README</a>
+        <a href="../README.zh-CN.md">中文 README</a>
+        <a href="../README.ja-JP.md">日本語 README</a>
+        <a href="../README.fr-FR.md">README Français</a>
+        <a href="../README.backup.md">README Backup</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Core Files</h2>
+      <div class="quick-links">
+        <a href="../index.json">index.json</a>
+        <a href="../McpTemplateModels.cs">McpTemplateModels.cs</a>
+        <a href="../.github/copilot-instructions.md">.github/copilot-instructions.md</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Template Files</h2>
+      <p>Loaded from <code>../index.json</code> templates array.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Template File</th>
+            <th>Template ID</th>
+            <th>Display Name</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody id="templates-body">
+          <tr><td colspan="4">Loading templates...</td></tr>
+        </tbody>
+      </table>
+      <div class="status" id="status"></div>
+    </section>
+  </main>
+
+  <script>
+    const body = document.getElementById("templates-body");
+    const status = document.getElementById("status");
+
+    async function loadJson(path) {
+      const response = await fetch(path, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`Failed to load ${path}: ${response.status}`);
+      }
+      return response.json();
+    }
+
+    function cell(text) {
+      const td = document.createElement("td");
+      td.textContent = text ?? "";
+      return td;
+    }
+
+    async function main() {
+      try {
+        const index = await loadJson("../index.json");
+        const files = Array.isArray(index.templates) ? index.templates : [];
+        body.innerHTML = "";
+
+        for (const file of files) {
+          const data = await loadJson(`../${file}`);
+          const row = document.createElement("tr");
+
+          const fileCell = document.createElement("td");
+          const link = document.createElement("a");
+          link.href = `../${file}`;
+          link.textContent = file;
+          fileCell.appendChild(link);
+
+          row.appendChild(fileCell);
+          row.appendChild(cell(data.template_id));
+          row.appendChild(cell(data.display_name));
+          row.appendChild(cell(data.category));
+          body.appendChild(row);
+        }
+
+        status.textContent = `Loaded ${files.length} template files.`;
+      } catch (error) {
+        body.innerHTML = "<tr><td colspan=\"4\">Failed to load template catalog.</td></tr>";
+        status.textContent = String(error);
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>

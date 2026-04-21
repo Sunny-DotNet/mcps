@@ -1,0 +1,22 @@
+{
+  "schema": "openstaff.mcp-template-index.v1",
+  "generated_from": "A:\\Git\\Github\\m67186636\\open-staff\\src\\application\\OpenStaff.Application\\Services\\McpSeedService.cs",
+  "notes": [
+    "All configurable values are declared in parameterSchema, including secrets.",
+    "The built-in templates mirror the current seed definitions.",
+    "github-official.mcp.json models the current official GitHub MCP deployment options discussed earlier."
+  ],
+  "templates": [
+    "filesystem.mcp.json",
+    "github-legacy.mcp.json",
+    "github-official.mcp.json",
+    "brave-search.mcp.json",
+    "puppeteer.mcp.json",
+    "sqlite.mcp.json",
+    "postgresql.mcp.json",
+    "memory.mcp.json",
+    "fetch.mcp.json",
+    "sequential-thinking.mcp.json",
+    "everything.mcp.json"
+  ]
+}

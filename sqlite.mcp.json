@@ -1,0 +1,46 @@
+{
+  "schema": "openstaff.mcp-template.v1",
+  "template_id": "builtin.sqlite.legacy",
+  "key": "sqlite",
+  "display_name": "SQLite",
+  "description": "SQLite 数据库操作：查询、建表、数据分析",
+  "category": "database",
+  "icon": "database",
+  "logo": "https://cdn.simpleicons.org/sqlite?viewbox=auto",
+  "source": "builtin-current-seed",
+  "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite",
+  "match_hints": {
+    "name": "SQLite",
+    "npm_package": "@modelcontextprotocol/server-sqlite",
+    "pypi_package": null
+  },
+  "profiles": [
+    {
+      "id": "package-python",
+      "profile_type": "package",
+      "transport_type": "stdio",
+      "runner_kind": "package",
+      "runner": "uvx",
+      "ecosystem": "python",
+      "package_name": "mcp-server-sqlite",
+      "package_version": "latest",
+      "command": "uvx",
+      "args_template": [
+        "mcp-server-sqlite",
+        "--db-path",
+        "${param:dbPath}"
+      ],
+      "env_template": {}
+    }
+  ],
+  "parameter_schema": [
+    {
+      "key": "dbPath",
+      "label": "SQLite DB Path",
+      "type": "string",
+      "required": true,
+      "default_value": "${project.workspace}\\data.db",
+      "description": "Path to the SQLite database file."
+    }
+  ]
+}

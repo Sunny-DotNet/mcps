@@ -1,0 +1,35 @@
+{
+  "schema": "openstaff.mcp-template.v1",
+  "template_id": "builtin.fetch.legacy",
+  "key": "fetch",
+  "display_name": "Fetch",
+  "description": "HTTP 请求工具：获取网页内容并转换为 Markdown",
+  "category": "search",
+  "icon": "globe",
+  "logo": "https://cdn.simpleicons.org/fetch?viewbox=auto",
+  "source": "builtin-current-seed",
+  "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
+  "match_hints": {
+    "name": "Fetch",
+    "npm_package": "@modelcontextprotocol/server-fetch",
+    "pypi_package": null
+  },
+  "profiles": [
+    {
+      "id": "package-python",
+      "profile_type": "package",
+      "transport_type": "stdio",
+      "runner_kind": "package",
+      "runner": "uvx",
+      "ecosystem": "python",
+      "package_name": "mcp-server-fetch",
+      "package_version": "latest",
+      "command": "uvx",
+      "args_template": [
+        "mcp-server-fetch"
+      ],
+      "env_template": {}
+    }
+  ],
+  "parameter_schema": []
+}

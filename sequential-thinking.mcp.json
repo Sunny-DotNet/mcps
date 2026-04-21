@@ -1,0 +1,36 @@
+{
+  "schema": "openstaff.mcp-template.v1",
+  "template_id": "builtin.sequential-thinking.legacy",
+  "key": "sequential-thinking",
+  "display_name": "Sequential Thinking",
+  "description": "结构化思考工具：支持多步推理、假设修正和思维分支",
+  "category": "general",
+  "icon": "lightbulb",
+  "logo": "https://cdn.simpleicons.org/sequential-thinking?viewbox=auto",
+  "source": "builtin-current-seed",
+  "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
+  "match_hints": {
+    "name": "Sequential Thinking",
+    "npm_package": "@modelcontextprotocol/server-sequential-thinking",
+    "pypi_package": null
+  },
+  "profiles": [
+    {
+      "id": "package-npm",
+      "profile_type": "package",
+      "transport_type": "stdio",
+      "runner_kind": "package",
+      "runner": "npx",
+      "ecosystem": "npm",
+      "package_name": "@modelcontextprotocol/server-sequential-thinking",
+      "package_version": "latest",
+      "command": "npx",
+      "args_template": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env_template": {}
+    }
+  ],
+  "parameter_schema": []
+}

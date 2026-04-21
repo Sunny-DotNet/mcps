@@ -1,0 +1,61 @@
+{
+  "schema": "openstaff.mcp-template.v1",
+  "template_id": "builtin.filesystem.legacy",
+  "key": "filesystem",
+  "display_name": "Filesystem",
+  "description": "读写本地文件系统，支持文件/目录的创建、读取、搜索等操作",
+  "category": "filesystem",
+  "icon": "folder",
+  "logo": "https://cdn.simpleicons.org/filesystem?viewbox=auto",
+  "source": "builtin-current-seed",
+  "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+  "match_hints": {
+    "name": "Filesystem",
+    "npm_package": "@modelcontextprotocol/server-filesystem",
+    "pypi_package": null
+  },
+  "profiles": [
+    {
+      "id": "package-npm",
+      "profile_type": "package",
+      "transport_type": "stdio",
+      "runner_kind": "package",
+      "runner": "npx",
+      "ecosystem": "npm",
+      "package_name": "@modelcontextprotocol/server-filesystem",
+      "package_version": "latest",
+      "command": "npx",
+      "args_template": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${param:workspacePath}"
+      ],
+      "env_template": {},
+      "working_directory_template": "${param:workingDirectory}"
+    }
+  ],
+  "parameter_schema": [
+    {
+      "key": "workspacePath",
+      "label": "Workspace Path",
+      "type": "string",
+      "required": true,
+      "default_value": "${project.workspace}",
+      "description": "Root directory exposed to the Filesystem MCP.",
+      "applies_to_profiles": [
+        "package-npm"
+      ]
+    },
+    {
+      "key": "workingDirectory",
+      "label": "Working Directory",
+      "type": "string",
+      "required": false,
+      "default_value": "${project.workspace}",
+      "description": "Process working directory for local launch.",
+      "applies_to_profiles": [
+        "package-npm"
+      ]
+    }
+  ]
+}
