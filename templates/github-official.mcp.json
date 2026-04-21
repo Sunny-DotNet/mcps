@@ -18,7 +18,7 @@
     {
       "id": "remote",
       "profile_type": "remote",
-      "transport_type": "http",
+      "transport_type": "streamable-http",
       "runner_kind": "remote",
       "runner": "remote",
       "url_template": "${param:remoteUrl}",
