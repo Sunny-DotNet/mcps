@@ -11,22 +11,22 @@ L’objectif est de stabiliser la structure `capability + profile + parameter_sc
 
 | Clé du modèle | Fichier | Catégorie | Exécuteur principal |
 |---|---|---|---|
-| filesystem | `filesystem.mcp.json` | filesystem | npx |
-| github (legacy) | `github-legacy.mcp.json` | dev-tools | npx |
-| github (official) | `github-official.mcp.json` | dev-tools | remote / docker / binary |
-| brave-search | `brave-search.mcp.json` | search | npx |
-| fetch | `fetch.mcp.json` | search | uvx |
-| everything | `everything.mcp.json` | filesystem | npx |
-| memory | `memory.mcp.json` | memory | npx |
-| postgresql | `postgresql.mcp.json` | database | npx |
-| puppeteer | `puppeteer.mcp.json` | browser | npx |
-| sequential-thinking | `sequential-thinking.mcp.json` | general | npx |
-| sqlite | `sqlite.mcp.json` | database | uvx |
+| filesystem | `templates/filesystem.mcp.json` | filesystem | npx |
+| github (legacy) | `templates/github-legacy.mcp.json` | dev-tools | npx |
+| github (official) | `templates/github-official.mcp.json` | dev-tools | remote / docker / binary |
+| brave-search | `templates/brave-search.mcp.json` | search | npx |
+| fetch | `templates/fetch.mcp.json` | search | uvx |
+| everything | `templates/everything.mcp.json` | filesystem | npx |
+| memory | `templates/memory.mcp.json` | memory | npx |
+| postgresql | `templates/postgresql.mcp.json` | database | npx |
+| puppeteer | `templates/puppeteer.mcp.json` | browser | npx |
+| sequential-thinking | `templates/sequential-thinking.mcp.json` | general | npx |
+| sqlite | `templates/sqlite.mcp.json` | database | uvx |
 
 ## Structure du dépôt
 
 - `index.json` : registre des modèles et liste canonique des fichiers
-- `*.mcp.json` : définitions de modèles (propriétés en snake_case)
+- `templates/*.mcp.json` : définitions de modèles (propriétés en snake_case)
 - `McpTemplateModels.cs` : mapping C# (DTO) des documents JSON
 - `.github/copilot-instructions.md` : instructions Copilot spécifiques au dépôt
 
@@ -54,7 +54,7 @@ L’objectif est de stabiliser la structure `capability + profile + parameter_sc
 - Utiliser `snake_case` pour toutes les propriétés JSON.
 - Placer tous les paramètres configurables (y compris les secrets) dans `parameter_schema`.
 - Utiliser `${param:<key>}` pour relier les champs d’exécution des profiles aux paramètres.
-- Utiliser pour `logo` le même style URL que dans `github-official.mcp.json`.
+- Utiliser pour `logo` le même style URL que dans `templates/github-official.mcp.json`.
 
 ## Build / Test / Lint
 

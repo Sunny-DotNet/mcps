@@ -11,22 +11,22 @@ It is used to discuss and stabilize the template contract around `capability + p
 
 | Template Key | File | Category | Primary Runner |
 |---|---|---|---|
-| filesystem | `filesystem.mcp.json` | filesystem | npx |
-| github (legacy) | `github-legacy.mcp.json` | dev-tools | npx |
-| github (official) | `github-official.mcp.json` | dev-tools | remote / docker / binary |
-| brave-search | `brave-search.mcp.json` | search | npx |
-| fetch | `fetch.mcp.json` | search | uvx |
-| everything | `everything.mcp.json` | filesystem | npx |
-| memory | `memory.mcp.json` | memory | npx |
-| postgresql | `postgresql.mcp.json` | database | npx |
-| puppeteer | `puppeteer.mcp.json` | browser | npx |
-| sequential-thinking | `sequential-thinking.mcp.json` | general | npx |
-| sqlite | `sqlite.mcp.json` | database | uvx |
+| filesystem | `templates/filesystem.mcp.json` | filesystem | npx |
+| github (legacy) | `templates/github-legacy.mcp.json` | dev-tools | npx |
+| github (official) | `templates/github-official.mcp.json` | dev-tools | remote / docker / binary |
+| brave-search | `templates/brave-search.mcp.json` | search | npx |
+| fetch | `templates/fetch.mcp.json` | search | uvx |
+| everything | `templates/everything.mcp.json` | filesystem | npx |
+| memory | `templates/memory.mcp.json` | memory | npx |
+| postgresql | `templates/postgresql.mcp.json` | database | npx |
+| puppeteer | `templates/puppeteer.mcp.json` | browser | npx |
+| sequential-thinking | `templates/sequential-thinking.mcp.json` | general | npx |
+| sqlite | `templates/sqlite.mcp.json` | database | uvx |
 
 ## Repository Structure
 
 - `index.json`: template registry and canonical file list
-- `*.mcp.json`: template definitions (snake_case properties)
+- `templates/*.mcp.json`: template definitions (snake_case properties)
 - `McpTemplateModels.cs`: C# DTO mapping for index/template JSON
 - `.github/copilot-instructions.md`: repository-specific Copilot guidance
 
@@ -54,7 +54,7 @@ It is used to discuss and stabilize the template contract around `capability + p
 - Keep all JSON property names in `snake_case`.
 - Keep all configurable values in `parameter_schema` (including secrets with `type: "password"`).
 - Use `${param:<key>}` placeholders to wire profile runtime fields to parameter values.
-- `logo` values follow the URL style used by `github-official.mcp.json`.
+- `logo` values follow the URL style used by `templates/github-official.mcp.json`.
 
 ## Build/Test/Lint
 

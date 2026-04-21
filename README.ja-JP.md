@@ -11,22 +11,22 @@
 
 | テンプレート Key | ファイル | カテゴリ | 主なランナー |
 |---|---|---|---|
-| filesystem | `filesystem.mcp.json` | filesystem | npx |
-| github（legacy） | `github-legacy.mcp.json` | dev-tools | npx |
-| github（official） | `github-official.mcp.json` | dev-tools | remote / docker / binary |
-| brave-search | `brave-search.mcp.json` | search | npx |
-| fetch | `fetch.mcp.json` | search | uvx |
-| everything | `everything.mcp.json` | filesystem | npx |
-| memory | `memory.mcp.json` | memory | npx |
-| postgresql | `postgresql.mcp.json` | database | npx |
-| puppeteer | `puppeteer.mcp.json` | browser | npx |
-| sequential-thinking | `sequential-thinking.mcp.json` | general | npx |
-| sqlite | `sqlite.mcp.json` | database | uvx |
+| filesystem | `templates/filesystem.mcp.json` | filesystem | npx |
+| github（legacy） | `templates/github-legacy.mcp.json` | dev-tools | npx |
+| github（official） | `templates/github-official.mcp.json` | dev-tools | remote / docker / binary |
+| brave-search | `templates/brave-search.mcp.json` | search | npx |
+| fetch | `templates/fetch.mcp.json` | search | uvx |
+| everything | `templates/everything.mcp.json` | filesystem | npx |
+| memory | `templates/memory.mcp.json` | memory | npx |
+| postgresql | `templates/postgresql.mcp.json` | database | npx |
+| puppeteer | `templates/puppeteer.mcp.json` | browser | npx |
+| sequential-thinking | `templates/sequential-thinking.mcp.json` | general | npx |
+| sqlite | `templates/sqlite.mcp.json` | database | uvx |
 
 ## リポジトリ構成
 
 - `index.json`: テンプレート索引と正規ファイル一覧
-- `*.mcp.json`: テンプレート定義（プロパティ名は snake_case）
+- `templates/*.mcp.json`: テンプレート定義（プロパティ名は snake_case）
 - `McpTemplateModels.cs`: index/template JSON の C# DTO マッピング
 - `.github/copilot-instructions.md`: このリポジトリ向け Copilot ガイド
 
@@ -54,7 +54,7 @@
 - JSON のプロパティ名はすべて `snake_case` を使用すること。
 - 設定可能な値（シークレットを含む）は `parameter_schema` に集約すること。
 - profile と設定値の紐づけは `${param:<key>}` を使うこと。
-- `logo` の値は `github-official.mcp.json` と同じ URL スタイルを使うこと。
+- `logo` の値は `templates/github-official.mcp.json` と同じ URL スタイルを使うこと。
 
 ## Build / Test / Lint
 
