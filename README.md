@@ -4,65 +4,94 @@
 
 ---
 
-This repository contains **demo MCP template documents** and the corresponding C# mapping models.  
+This repository contains **demo MCP template documents** and the corresponding C# mapping models.
 It is used to discuss and stabilize the template contract around `capability + profile + parameter_schema`.
-
-## Template Catalog
-
-| Template Key | File | Category | Primary Runner |
-|---|---|---|---|
-| filesystem | `templates/filesystem.mcp.json` | filesystem | npx |
-| github (legacy) | `templates/github-legacy.mcp.json` | dev-tools | npx |
-| github (official) | `templates/github-official.mcp.json` | dev-tools | remote / docker / binary |
-| brave-search | `templates/brave-search.mcp.json` | search | npx |
-| fetch | `templates/fetch.mcp.json` | search | uvx |
-| everything | `templates/everything.mcp.json` | filesystem | npx |
-| memory | `templates/memory.mcp.json` | memory | npx |
-| postgresql | `templates/postgresql.mcp.json` | database | npx |
-| puppeteer | `templates/puppeteer.mcp.json` | browser | npx |
-| sequential-thinking | `templates/sequential-thinking.mcp.json` | general | npx |
-| sqlite | `templates/sqlite.mcp.json` | database | uvx |
 
 ## Repository Structure
 
-- `index.json`: aggregated template summary array (generated from `templates/*.mcp.json`)
-- `templates/*.mcp.json`: template definitions (snake_case properties)
-- `McpTemplateModels.cs`: C# DTO mapping for index/template JSON
-- `.github/copilot-instructions.md`: repository-specific Copilot guidance
-
-## JSON Contract (snake_case)
-
-```json
-{
-  "schema": "openstaff.mcp-template.v1",
-  "template_id": "builtin.filesystem.legacy",
-  "key": "filesystem",
-  "display_name": "Filesystem",
-  "match_hints": {
-    "name": "Filesystem",
-    "npm_package": "@modelcontextprotocol/server-filesystem",
-    "pypi_package": null
-  },
-  "profiles": [],
-  "parameter_schema": []
-}
 ```
+├── templates/             # MCP 模板定义文件 (*.mcp.json)
+├── index.json             # 从 templates 自动生成的摘要数组
+├── index.html             # 模板浏览 Web 界面
+├── McpTemplateModels.cs   # 模板文档的 C# DTO 映射
+├── .github/
+│   └── scripts/generate_index.py   # 生成 index.json 的脚本
+```
+
+## JSON Contract
+
+Each `templates/*.mcp.json` file follows the `openstaff.mcp-template.v1` schema. All property names use **snake_case**.
+
+### Top-level Properties
+
+| Property | Type | Description |
+|---|---|---|
+| `schema` | string | Schema identifier, always `"openstaff.mcp-template.v1"` |
+| `template_id` | string | Unique template identifier. Builtin mirrors: `builtin.<capability>.legacy`; official: `official.<name>.current` |
+| `key` | string | Short identifier used for lookup and matching |
+| `display_name` | string | Human-readable name shown in UI |
+| `description` | string | Brief description of what the template provides |
+| `category` | string | One of: `filesystem`, `dev-tools`, `search`, `database`, `browser`, `memory`, `general` |
+| `icon` | string | Icon identifier (e.g. `"folder"`, `"github"`) |
+| `logo` | string | Icon URL, format: `https://cdn.simpleicons.org/<name>?viewbox=auto` |
+| `source` | string | Template origin identifier (e.g. `"builtin-current-seed"`, `"official-github-mcp"`) |
+| `homepage` | string | URL to the upstream project or documentation |
+| `match_hints` | object | Package discovery hints (see below) |
+| `profiles` | array | Runnable deployment configurations (see below) |
+| `parameter_schema` | array | All user-configurable values including secrets (see below) |
+
+### match_hints
+
+| Property | Type | Description |
+|---|---|---|
+| `name` | string | Display name for matching |
+| `npm_package` | string\|null | npm package name for auto-discovery |
+| `pypi_package` | string\|null | PyPI package name for auto-discovery |
+
+### profiles
+
+Each profile defines a deployment mode. Supported `profile_type` values: `package`, `remote`, `container`, `binary`.
+
+| Property | Type | Applicable Profiles | Description |
+|---|---|---|---|
+| `id` | string | all | Unique profile identifier (e.g. `"package-npm"`, `"remote"`) |
+| `profile_type` | string | all | One of: `package`, `remote`, `container`, `binary` |
+| `transport_type` | string | all | Communication transport: `"stdio"` or `"http"` |
+| `runner_kind` | string | all | Runner category, matches `profile_type` |
+| `runner` | string | all | Runner command: `"npx"`, `"uvx"`, `"remote"`, `"docker"`, `"binary"` |
+| `ecosystem` | string | package | Package ecosystem: `"npm"` or `"python"` |
+| `package_name` | string | package | Package identifier (e.g. `"@modelcontextprotocol/server-filesystem"`) |
+| `package_version` | string | package | Version constraint (e.g. `"latest"`) |
+| `command` | string | package, container | Static command to execute |
+| `command_template` | string | binary | Command with interpolation: `"${param:binaryPath}"` |
+| `args_template` | string[] | all | Argument list with interpolation placeholders |
+| `env_template` | object | all | Environment variables with interpolation: `{"KEY": "${param:accessToken}"}` |
+| `working_directory_template` | string | package, binary | Working directory with interpolation |
+| `url_template` | string | remote | Remote endpoint URL with interpolation |
+| `headers_template` | object | remote | HTTP headers with interpolation |
+| `image` | string | container | Container image name (without tag) |
+| `image_tag_template` | string | container | Image tag with interpolation |
+
+### parameter_schema
+
+All user-configurable values live here. No separate `secrets` block — use `type: "password"` for sensitive values.
+
+| Property | Type | Description |
+|---|---|
+| `key` | string | Parameter identifier, referenced as `${param:<key>}` in profiles |
+| `label` | string | Human-readable label shown in UI |
+| `type` | string | One of: `"string"`, `"boolean"`, `"password"` |
+| `required` | boolean | Whether the user must provide a value |
+| `default_value` | any | Default value. Use `"${project.workspace}"` for workspace-relative defaults |
+| `description` | string | Explanation of what this parameter controls |
+| `applies_to_profiles` | string[]\|omitted | If set, only applies to the listed profile IDs. Omitted = applies to all profiles |
+
+### Interpolation Placeholders
+
+- `${param:<key>}` — References a value from `parameter_schema`
+- `${project.workspace}` — Current project workspace path
 
 ## Conventions
 
-- `index.json` should be generated from `templates/*.mcp.json` (manually via script or by GitHub Actions), not hand-maintained.
-- Keep all JSON property names in `snake_case`.
-- Keep all configurable values in `parameter_schema` (including secrets with `type: "password"`).
-- Use `${param:<key>}` placeholders to wire profile runtime fields to parameter values.
-- `logo` values follow the URL style used by `templates/github-official.mcp.json`.
-
-## Build/Test/Lint
-
-This repo currently has no committed build/test/lint project files, so there are no native commands to run.
-
-## GitHub Pages
-
-After enabling Pages, open:
-
-- `index.html` (repository view)
-- or the published Pages URL for this repo
+- `index.json` is generated from `templates/*.mcp.json` via `python .github/scripts/generate_index.py`, not hand-maintained.
+- If template schema fields change, update `McpTemplateModels.cs` in the same change.

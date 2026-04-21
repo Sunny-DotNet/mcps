@@ -1,0 +1,36 @@
+{
+  "schema": "openstaff.mcp-template.v1",
+  "template_id": "official.playwright.current",
+  "key": "playwright",
+  "display_name": "Playwright",
+  "description": "使用 Playwright MCP 进行浏览器自动化，基于结构化可访问性快照与页面交互。",
+  "category": "browser",
+  "icon": "chrome",
+  "logo": "https://cdn.simpleicons.org/playwright?viewbox=auto",
+  "source": "official-playwright-mcp",
+  "homepage": "https://github.com/microsoft/playwright-mcp",
+  "match_hints": {
+    "name": "Playwright",
+    "npm_package": "@playwright/mcp",
+    "pypi_package": null
+  },
+  "profiles": [
+    {
+      "id": "package-npm",
+      "profile_type": "package",
+      "transport_type": "stdio",
+      "runner_kind": "package",
+      "runner": "npx",
+      "ecosystem": "npm",
+      "package_name": "@playwright/mcp",
+      "package_version": "latest",
+      "command": "npx",
+      "args_template": [
+        "-y",
+        "@playwright/mcp@latest"
+      ],
+      "env_template": {}
+    }
+  ],
+  "parameter_schema": []
+}

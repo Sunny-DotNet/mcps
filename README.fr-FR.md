@@ -4,65 +4,94 @@
 
 ---
 
-Ce dépôt contient des **exemples de modèles MCP** ainsi que les modèles C# correspondants.  
-L’objectif est de stabiliser la structure `capability + profile + parameter_schema`.
-
-## Catalogue des modèles
-
-| Clé du modèle | Fichier | Catégorie | Exécuteur principal |
-|---|---|---|---|
-| filesystem | `templates/filesystem.mcp.json` | filesystem | npx |
-| github (legacy) | `templates/github-legacy.mcp.json` | dev-tools | npx |
-| github (official) | `templates/github-official.mcp.json` | dev-tools | remote / docker / binary |
-| brave-search | `templates/brave-search.mcp.json` | search | npx |
-| fetch | `templates/fetch.mcp.json` | search | uvx |
-| everything | `templates/everything.mcp.json` | filesystem | npx |
-| memory | `templates/memory.mcp.json` | memory | npx |
-| postgresql | `templates/postgresql.mcp.json` | database | npx |
-| puppeteer | `templates/puppeteer.mcp.json` | browser | npx |
-| sequential-thinking | `templates/sequential-thinking.mcp.json` | general | npx |
-| sqlite | `templates/sqlite.mcp.json` | database | uvx |
+Ce dépôt contient des **exemples de modèles MCP** ainsi que les modèles C# correspondants.
+L'objectif est de stabiliser la structure `capability + profile + parameter_schema`.
 
 ## Structure du dépôt
 
-- `index.json` : tableau de synthèse généré depuis `templates/*.mcp.json`
-- `templates/*.mcp.json` : définitions de modèles (propriétés en snake_case)
-- `McpTemplateModels.cs` : mapping C# (DTO) des documents JSON
-- `.github/copilot-instructions.md` : instructions Copilot spécifiques au dépôt
-
-## Contrat JSON (snake_case)
-
-```json
-{
-  "schema": "openstaff.mcp-template.v1",
-  "template_id": "builtin.filesystem.legacy",
-  "key": "filesystem",
-  "display_name": "Filesystem",
-  "match_hints": {
-    "name": "Filesystem",
-    "npm_package": "@modelcontextprotocol/server-filesystem",
-    "pypi_package": null
-  },
-  "profiles": [],
-  "parameter_schema": []
-}
+```
+├── templates/             # Fichiers de définition de modèles MCP (*.mcp.json)
+├── index.json             # Tableau de synthèse généré automatiquement depuis templates
+├── index.html             # Interface Web de navigation des modèles
+├── McpTemplateModels.cs   # Mapping C# (DTO) des documents de modèles
+├── .github/
+│   └── scripts/generate_index.py   # Script de génération de index.json
 ```
 
-## Conventions clés
+## Contrat JSON
 
-- `index.json` doit être généré depuis `templates/*.mcp.json` (script ou GitHub Actions), pas maintenu manuellement.
-- Utiliser `snake_case` pour toutes les propriétés JSON.
-- Placer tous les paramètres configurables (y compris les secrets) dans `parameter_schema`.
-- Utiliser `${param:<key>}` pour relier les champs d’exécution des profiles aux paramètres.
-- Utiliser pour `logo` le même style URL que dans `templates/github-official.mcp.json`.
+Chaque fichier `templates/*.mcp.json` suit le schéma `openstaff.mcp-template.v1`. Tous les noms de propriétés utilisent le **snake_case**.
 
-## Build / Test / Lint
+### Propriétés de premier niveau
 
-Ce dépôt ne contient pas de configuration de projet exécutable pour build/test/lint, donc aucune commande native n’est disponible.
+| Propriété | Type | Description |
+|---|---|---|
+| `schema` | string | Identifiant du schéma, toujours `"openstaff.mcp-template.v1"` |
+| `template_id` | string | Identifiant unique du modèle. Miroirs intégrés : `builtin.<capability>.legacy` ; officiel : `official.<name>.current` |
+| `key` | string | Identifiant court utilisé pour la recherche et le matching |
+| `display_name` | string | Nom affiché dans l'interface |
+| `description` | string | Brève description des fonctionnalités du modèle |
+| `category` | string | Catégorie : `filesystem`, `dev-tools`, `search`, `database`, `browser`, `memory`, `general` |
+| `icon` | string | Identifiant d'icône (ex. `"folder"`, `"github"`) |
+| `logo` | string | URL de l'icône. Format : `https://cdn.simpleicons.org/<name>?viewbox=auto` |
+| `source` | string | Identifiant de la source du modèle (ex. `"builtin-current-seed"`, `"official-github-mcp"`) |
+| `homepage` | string | URL du projet source ou de la documentation |
+| `match_hints` | object | Indices de découverte de paquets (voir ci-dessous) |
+| `profiles` | array | Configurations de déploiement exécutables (voir ci-dessous) |
+| `parameter_schema` | array | Toutes les valeurs configurables par l'utilisateur, y compris les secrets (voir ci-dessous) |
 
-## GitHub Pages
+### match_hints
 
-Après activation de Pages, consultez :
+| Propriété | Type | Description |
+|---|---|---|
+| `name` | string | Nom affiché pour le matching |
+| `npm_package` | string\|null | Nom du paquet npm pour la découverte automatique |
+| `pypi_package` | string\|null | Nom du paquet PyPI pour la découverte automatique |
 
-- `index.html` (vue dépôt)
-- ou l’URL GitHub Pages publiée pour ce dépôt
+### profiles
+
+Chaque profile définit un mode de déploiement. `profile_type` supportés : `package`, `remote`, `container`, `binary`.
+
+| Propriété | Type | Profiles concernés | Description |
+|---|---|---|---|
+| `id` | string | Tous | Identifiant unique du profile (ex. `"package-npm"`, `"remote"`) |
+| `profile_type` | string | Tous | Parmi : `package`, `remote`, `container`, `binary` |
+| `transport_type` | string | Tous | Transport de communication : `"stdio"` ou `"http"` |
+| `runner_kind` | string | Tous | Catégorie du lanceur, correspond à `profile_type` |
+| `runner` | string | Tous | Commande du lanceur : `"npx"`, `"uvx"`, `"remote"`, `"docker"`, `"binary"` |
+| `ecosystem` | string | package | Écosystème de paquets : `"npm"` ou `"python"` |
+| `package_name` | string | package | Identifiant du paquet (ex. `"@modelcontextprotocol/server-filesystem"`) |
+| `package_version` | string | package | Contrainte de version (ex. `"latest"`) |
+| `command` | string | package, container | Commande statique à exécuter |
+| `command_template` | string | binary | Commande avec interpolation : `"${param:binaryPath}"` |
+| `args_template` | string[] | Tous | Liste d'arguments avec placeholders d'interpolation |
+| `env_template` | object | Tous | Variables d'environnement avec interpolation : `{"KEY": "${param:accessToken}"}` |
+| `working_directory_template` | string | package, binary | Répertoire de travail avec interpolation |
+| `url_template` | string | remote | URL du point de terminaison distant avec interpolation |
+| `headers_template` | object | remote | En-têtes HTTP avec interpolation |
+| `image` | string | container | Nom de l'image conteneur (sans tag) |
+| `image_tag_template` | string | container | Tag de l'image avec interpolation |
+
+### parameter_schema
+
+Toutes les valeurs configurables par l'utilisateur sont ici. Pas de bloc `secrets` séparé — utiliser `type: "password"` pour les valeurs sensibles.
+
+| Propriété | Type | Description |
+|---|---|---|
+| `key` | string | Identifiant du paramètre, référencé par `${param:<key>}` dans les profiles |
+| `label` | string | Libellé affiché dans l'interface |
+| `type` | string | Parmi : `"string"`, `"boolean"`, `"password"` |
+| `required` | boolean | Si l'utilisateur doit fournir une valeur |
+| `default_value` | any | Valeur par défaut. Chemin relatif au workspace : `"${project.workspace}"` |
+| `description` | string | Description du rôle du paramètre |
+| `applies_to_profiles` | string[]\|omis | Si défini, s'applique uniquement aux IDs de profile listés. Omis = s'applique à tous les profiles |
+
+### Placeholders d'interpolation
+
+- `${param:<key>}` — Référence une valeur de `parameter_schema`
+- `${project.workspace}` — Chemin du workspace du projet courant
+
+## Conventions
+
+- `index.json` est généré via `python .github/scripts/generate_index.py` depuis `templates/*.mcp.json`, pas maintenu manuellement.
+- Si les champs du schéma de modèle changent, mettre à jour `McpTemplateModels.cs` dans la même modification.

@@ -56,6 +56,14 @@
     "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory"
   },
   {
+    "key": "playwright",
+    "display_name": "Playwright",
+    "logo": "https://cdn.simpleicons.org/playwright?viewbox=auto",
+    "description": "使用 Playwright MCP 进行浏览器自动化，基于结构化可访问性快照与页面交互。",
+    "category": "browser",
+    "homepage": "https://github.com/microsoft/playwright-mcp"
+  },
+  {
     "key": "postgresql",
     "display_name": "PostgreSQL",
     "logo": "https://cdn.simpleicons.org/postgresql?viewbox=auto",

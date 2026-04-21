@@ -4,65 +4,94 @@
 
 ---
 
-本仓库用于存放 **MCP 模板定义示例** 以及对应的 C# 映射模型。  
+本仓库用于存放 **MCP 模板定义示例** 以及对应的 C# 映射模型。
 主要目标是沉淀并固定 `capability + profile + parameter_schema` 这套模板结构。
-
-## 模板清单
-
-| 模板 Key | 文件 | 分类 | 主要运行方式 |
-|---|---|---|---|
-| filesystem | `templates/filesystem.mcp.json` | filesystem | npx |
-| github（legacy） | `templates/github-legacy.mcp.json` | dev-tools | npx |
-| github（official） | `templates/github-official.mcp.json` | dev-tools | remote / docker / binary |
-| brave-search | `templates/brave-search.mcp.json` | search | npx |
-| fetch | `templates/fetch.mcp.json` | search | uvx |
-| everything | `templates/everything.mcp.json` | filesystem | npx |
-| memory | `templates/memory.mcp.json` | memory | npx |
-| postgresql | `templates/postgresql.mcp.json` | database | npx |
-| puppeteer | `templates/puppeteer.mcp.json` | browser | npx |
-| sequential-thinking | `templates/sequential-thinking.mcp.json` | general | npx |
-| sqlite | `templates/sqlite.mcp.json` | database | uvx |
 
 ## 仓库结构
 
-- `index.json`：由 `templates/*.mcp.json` 聚合生成的模板摘要数组
-- `templates/*.mcp.json`：模板定义（属性统一为 snake_case）
-- `McpTemplateModels.cs`：JSON 对应的 C# DTO 映射
-- `.github/copilot-instructions.md`：仓库定制的 Copilot 指南
-
-## JSON 合同（snake_case）
-
-```json
-{
-  "schema": "openstaff.mcp-template.v1",
-  "template_id": "builtin.filesystem.legacy",
-  "key": "filesystem",
-  "display_name": "Filesystem",
-  "match_hints": {
-    "name": "Filesystem",
-    "npm_package": "@modelcontextprotocol/server-filesystem",
-    "pypi_package": null
-  },
-  "profiles": [],
-  "parameter_schema": []
-}
+```
+├── templates/             # MCP 模板定义文件 (*.mcp.json)
+├── index.json             # 从 templates 自动生成的摘要数组
+├── index.html             # 模板浏览 Web 界面
+├── McpTemplateModels.cs   # 模板文档的 C# DTO 映射
+├── .github/
+│   └── scripts/generate_index.py   # 生成 index.json 的脚本
 ```
 
-## 关键约定
+## JSON 合约
 
-- `index.json` 应由 `templates/*.mcp.json` 自动生成（脚本或 GitHub Actions），不建议手工维护。
-- JSON 属性统一使用 `snake_case`。
-- 所有可配置项（包括密钥）统一放在 `parameter_schema`。
-- 通过 `${param:<key>}` 把 profile 运行参数与配置项绑定。
-- `logo` 的值统一采用 `templates/github-official.mcp.json` 的 URL 风格。
+每个 `templates/*.mcp.json` 文件遵循 `openstaff.mcp-template.v1` schema，所有属性名使用 **snake_case**。
 
-## 构建 / 测试 / Lint
+### 顶层属性
 
-当前仓库没有提交可执行的构建、测试、Lint 工程配置，因此没有原生命令可运行。
+| 属性 | 类型 | 说明 |
+|---|---|---|
+| `schema` | string | Schema 标识符，固定为 `"openstaff.mcp-template.v1"` |
+| `template_id` | string | 唯一模板标识。内置镜像：`builtin.<capability>.legacy`；官方模板：`official.<name>.current` |
+| `key` | string | 短标识符，用于查找和匹配 |
+| `display_name` | string | 在 UI 中显示的名称 |
+| `description` | string | 模板功能的简要描述 |
+| `category` | string | 分类：`filesystem`、`dev-tools`、`search`、`database`、`browser`、`memory`、`general` |
+| `icon` | string | 图标标识（如 `"folder"`、`"github"`） |
+| `logo` | string | 图标 URL，格式：`https://cdn.simpleicons.org/<name>?viewbox=auto` |
+| `source` | string | 模板来源标识（如 `"builtin-current-seed"`、`"official-github-mcp"`） |
+| `homepage` | string | 上游项目或文档的 URL |
+| `match_hints` | object | 包发现提示（见下文） |
+| `profiles` | array | 可运行的部署配置（见下文） |
+| `parameter_schema` | array | 所有用户可配置值，包括密钥（见下文） |
 
-## GitHub Pages
+### match_hints
 
-启用 Pages 后可访问：
+| 属性 | 类型 | 说明 |
+|---|---|---|
+| `name` | string | 用于匹配的显示名称 |
+| `npm_package` | string\|null | npm 包名，用于自动发现 |
+| `pypi_package` | string\|null | PyPI 包名，用于自动发现 |
 
-- `index.html`（仓库内页面）
-- 或仓库对应的 GitHub Pages 发布地址
+### profiles
+
+每个 profile 定义一种部署方式。支持的 `profile_type`：`package`、`remote`、`container`、`binary`。
+
+| 属性 | 类型 | 适用 Profile | 说明 |
+|---|---|---|---|
+| `id` | string | 全部 | 唯一 profile 标识（如 `"package-npm"`、`"remote"`） |
+| `profile_type` | string | 全部 | 取值：`package`、`remote`、`container`、`binary` |
+| `transport_type` | string | 全部 | 通信传输方式：`"stdio"` 或 `"http"` |
+| `runner_kind` | string | 全部 | 运行器类别，与 `profile_type` 一致 |
+| `runner` | string | 全部 | 运行器命令：`"npx"`、`"uvx"`、`"remote"`、`"docker"`、`"binary"` |
+| `ecosystem` | string | package | 包生态系统：`"npm"` 或 `"python"` |
+| `package_name` | string | package | 包标识符（如 `"@modelcontextprotocol/server-filesystem"`） |
+| `package_version` | string | package | 版本约束（如 `"latest"`） |
+| `command` | string | package, container | 静态执行命令 |
+| `command_template` | string | binary | 带插值的命令：`"${param:binaryPath}"` |
+| `args_template` | string[] | 全部 | 参数列表，支持插值占位符 |
+| `env_template` | object | 全部 | 环境变量，支持插值：`{"KEY": "${param:accessToken}"}` |
+| `working_directory_template` | string | package, binary | 工作目录，支持插值 |
+| `url_template` | string | remote | 远程端点 URL，支持插值 |
+| `headers_template` | object | remote | HTTP 请求头，支持插值 |
+| `image` | string | container | 容器镜像名称（不含标签） |
+| `image_tag_template` | string | container | 镜像标签，支持插值 |
+
+### parameter_schema
+
+所有用户可配置值统一放在此处。不使用单独的 `secrets` 块——密钥类型使用 `type: "password"`。
+
+| 属性 | 类型 | 说明 |
+|---|---|---|
+| `key` | string | 参数标识符，在 profiles 中通过 `${param:<key>}` 引用 |
+| `label` | string | 在 UI 中显示的标签 |
+| `type` | string | 取值：`"string"`、`"boolean"`、`"password"` |
+| `required` | boolean | 是否为必填项 |
+| `default_value` | any | 默认值。工作区相对路径使用 `"${project.workspace}"` |
+| `description` | string | 参数用途说明 |
+| `applies_to_profiles` | string[]\|省略 | 设置时仅对列出的 profile ID 生效。省略表示对所有 profile 生效 |
+
+### 插值占位符
+
+- `${param:<key>}` — 引用 `parameter_schema` 中的值
+- `${project.workspace}` — 当前项目工作区路径
+
+## 约定
+
+- `index.json` 通过 `python .github/scripts/generate_index.py` 从 `templates/*.mcp.json` 生成，不要手动维护。
+- 模板 schema 字段变更时，需同步更新 `McpTemplateModels.cs`。
