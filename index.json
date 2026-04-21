@@ -1,22 +1,90 @@
-{
-  "schema": "openstaff.mcp-template-index.v1",
-  "generated_from": "A:\\Git\\Github\\m67186636\\open-staff\\src\\application\\OpenStaff.Application\\Services\\McpSeedService.cs",
-  "notes": [
-    "All configurable values are declared in parameterSchema, including secrets.",
-    "The built-in templates mirror the current seed definitions.",
-    "templates/github-official.mcp.json models the current official GitHub MCP deployment options discussed earlier."
-  ],
-  "templates": [
-    "templates/filesystem.mcp.json",
-    "templates/github-legacy.mcp.json",
-    "templates/github-official.mcp.json",
-    "templates/brave-search.mcp.json",
-    "templates/puppeteer.mcp.json",
-    "templates/sqlite.mcp.json",
-    "templates/postgresql.mcp.json",
-    "templates/memory.mcp.json",
-    "templates/fetch.mcp.json",
-    "templates/sequential-thinking.mcp.json",
-    "templates/everything.mcp.json"
-  ]
-}
+[
+  {
+    "key": "brave-search",
+    "display_name": "Brave Search",
+    "logo": "https://cdn.simpleicons.org/brave-search?viewbox=auto",
+    "description": "使用 Brave Search API 进行网页搜索和本地搜索",
+    "category": "search",
+    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search"
+  },
+  {
+    "key": "everything",
+    "display_name": "Everything",
+    "logo": "https://cdn.simpleicons.org/everything?viewbox=auto",
+    "description": "Windows 文件搜索工具（基于 Everything SDK）",
+    "category": "filesystem",
+    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/everything"
+  },
+  {
+    "key": "fetch",
+    "display_name": "Fetch",
+    "logo": "https://cdn.simpleicons.org/fetch?viewbox=auto",
+    "description": "HTTP 请求工具：获取网页内容并转换为 Markdown",
+    "category": "search",
+    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch"
+  },
+  {
+    "key": "filesystem",
+    "display_name": "Filesystem",
+    "logo": "https://cdn.simpleicons.org/filesystem?viewbox=auto",
+    "description": "读写本地文件系统，支持文件/目录的创建、读取、搜索等操作",
+    "category": "filesystem",
+    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem"
+  },
+  {
+    "key": "github",
+    "display_name": "GitHub",
+    "logo": "https://cdn.simpleicons.org/github?viewbox=auto",
+    "description": "GitHub API 操作：仓库管理、Issue/PR 操作、代码搜索等",
+    "category": "dev-tools",
+    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/github"
+  },
+  {
+    "key": "github",
+    "display_name": "GitHub",
+    "logo": "https://cdn.simpleicons.org/github?viewbox=auto",
+    "description": "Official GitHub MCP deployment options: remote hosted, Docker container, or local binary.",
+    "category": "dev-tools",
+    "homepage": "https://github.com/github/github-mcp-server"
+  },
+  {
+    "key": "memory",
+    "display_name": "Memory",
+    "logo": "https://cdn.simpleicons.org/memory?viewbox=auto",
+    "description": "基于知识图谱的持久化记忆系统",
+    "category": "memory",
+    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory"
+  },
+  {
+    "key": "postgresql",
+    "display_name": "PostgreSQL",
+    "logo": "https://cdn.simpleicons.org/postgresql?viewbox=auto",
+    "description": "PostgreSQL 数据库操作：查询、Schema 分析",
+    "category": "database",
+    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/postgres"
+  },
+  {
+    "key": "puppeteer",
+    "display_name": "Puppeteer",
+    "logo": "https://cdn.simpleicons.org/puppeteer?viewbox=auto",
+    "description": "浏览器自动化：网页截图、点击、表单填写、JavaScript 执行",
+    "category": "browser",
+    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/puppeteer"
+  },
+  {
+    "key": "sequential-thinking",
+    "display_name": "Sequential Thinking",
+    "logo": "https://cdn.simpleicons.org/sequential-thinking?viewbox=auto",
+    "description": "结构化思考工具：支持多步推理、假设修正和思维分支",
+    "category": "general",
+    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking"
+  },
+  {
+    "key": "sqlite",
+    "display_name": "SQLite",
+    "logo": "https://cdn.simpleicons.org/sqlite?viewbox=auto",
+    "description": "SQLite 数据库操作：查询、建表、数据分析",
+    "category": "database",
+    "homepage": "https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite"
+  }
+]

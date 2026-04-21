@@ -25,7 +25,7 @@ L’objectif est de stabiliser la structure `capability + profile + parameter_sc
 
 ## Structure du dépôt
 
-- `index.json` : registre des modèles et liste canonique des fichiers
+- `index.json` : tableau de synthèse généré depuis `templates/*.mcp.json`
 - `templates/*.mcp.json` : définitions de modèles (propriétés en snake_case)
 - `McpTemplateModels.cs` : mapping C# (DTO) des documents JSON
 - `.github/copilot-instructions.md` : instructions Copilot spécifiques au dépôt
@@ -50,7 +50,7 @@ L’objectif est de stabiliser la structure `capability + profile + parameter_sc
 
 ## Conventions clés
 
-- Garder `index.json -> templates[]` synchronisé avec les fichiers réels.
+- `index.json` doit être généré depuis `templates/*.mcp.json` (script ou GitHub Actions), pas maintenu manuellement.
 - Utiliser `snake_case` pour toutes les propriétés JSON.
 - Placer tous les paramètres configurables (y compris les secrets) dans `parameter_schema`.
 - Utiliser `${param:<key>}` pour relier les champs d’exécution des profiles aux paramètres.
@@ -64,5 +64,5 @@ Ce dépôt ne contient pas de configuration de projet exécutable pour build/tes
 
 Après activation de Pages, consultez :
 
-- `docs/index.html` (vue dépôt)
+- `index.html` (vue dépôt)
 - ou l’URL GitHub Pages publiée pour ce dépôt

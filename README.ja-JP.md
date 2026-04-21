@@ -25,7 +25,7 @@
 
 ## リポジトリ構成
 
-- `index.json`: テンプレート索引と正規ファイル一覧
+- `index.json`: `templates/*.mcp.json` から生成されるテンプレート要約配列
 - `templates/*.mcp.json`: テンプレート定義（プロパティ名は snake_case）
 - `McpTemplateModels.cs`: index/template JSON の C# DTO マッピング
 - `.github/copilot-instructions.md`: このリポジトリ向け Copilot ガイド
@@ -50,7 +50,7 @@
 
 ## 主要な規約
 
-- `index.json -> templates[]` は実ファイルと常に同期すること。
+- `index.json` は `templates/*.mcp.json` から生成すること（スクリプトまたは GitHub Actions）。手動管理はしないこと。
 - JSON のプロパティ名はすべて `snake_case` を使用すること。
 - 設定可能な値（シークレットを含む）は `parameter_schema` に集約すること。
 - profile と設定値の紐づけは `${param:<key>}` を使うこと。
@@ -64,5 +64,5 @@
 
 Pages を有効化した後、以下を参照できます。
 
-- `docs/index.html`（リポジトリ内ページ）
+- `index.html`（リポジトリ内ページ）
 - またはこのリポジトリの GitHub Pages 公開 URL

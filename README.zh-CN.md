@@ -25,7 +25,7 @@
 
 ## 仓库结构
 
-- `index.json`：模板索引与文件清单入口
+- `index.json`：由 `templates/*.mcp.json` 聚合生成的模板摘要数组
 - `templates/*.mcp.json`：模板定义（属性统一为 snake_case）
 - `McpTemplateModels.cs`：JSON 对应的 C# DTO 映射
 - `.github/copilot-instructions.md`：仓库定制的 Copilot 指南
@@ -50,7 +50,7 @@
 
 ## 关键约定
 
-- `index.json -> templates[]` 必须与实际模板文件保持同步。
+- `index.json` 应由 `templates/*.mcp.json` 自动生成（脚本或 GitHub Actions），不建议手工维护。
 - JSON 属性统一使用 `snake_case`。
 - 所有可配置项（包括密钥）统一放在 `parameter_schema`。
 - 通过 `${param:<key>}` 把 profile 运行参数与配置项绑定。
@@ -64,5 +64,5 @@
 
 启用 Pages 后可访问：
 
-- `docs/index.html`（仓库内页面）
+- `index.html`（仓库内页面）
 - 或仓库对应的 GitHub Pages 发布地址

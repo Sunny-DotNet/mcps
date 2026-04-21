@@ -25,7 +25,7 @@ It is used to discuss and stabilize the template contract around `capability + p
 
 ## Repository Structure
 
-- `index.json`: template registry and canonical file list
+- `index.json`: aggregated template summary array (generated from `templates/*.mcp.json`)
 - `templates/*.mcp.json`: template definitions (snake_case properties)
 - `McpTemplateModels.cs`: C# DTO mapping for index/template JSON
 - `.github/copilot-instructions.md`: repository-specific Copilot guidance
@@ -50,7 +50,7 @@ It is used to discuss and stabilize the template contract around `capability + p
 
 ## Conventions
 
-- Keep `index.json -> templates[]` synchronized with actual files.
+- `index.json` should be generated from `templates/*.mcp.json` (manually via script or by GitHub Actions), not hand-maintained.
 - Keep all JSON property names in `snake_case`.
 - Keep all configurable values in `parameter_schema` (including secrets with `type: "password"`).
 - Use `${param:<key>}` placeholders to wire profile runtime fields to parameter values.
@@ -64,5 +64,5 @@ This repo currently has no committed build/test/lint project files, so there are
 
 After enabling Pages, open:
 
-- `docs/index.html` (repository view)
+- `index.html` (repository view)
 - or the published Pages URL for this repo
