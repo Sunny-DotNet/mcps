@@ -121,16 +121,14 @@
       <table>
         <thead>
           <tr>
-            <th>key</th>
-            <th>display_name</th>
-            <th>logo</th>
-            <th>description</th>
-            <th>category</th>
-            <th>homepage</th>
+            <th>名称</th>
+            <th>分类</th>
+            <th>项目页</th>
+            <th>简介</th>
           </tr>
         </thead>
         <tbody id="templates-body">
-          <tr><td colspan="6">Loading...</td></tr>
+          <tr><td colspan="4">Loading...</td></tr>
         </tbody>
       </table>
       <div class="status" id="status"></div>
@@ -163,28 +161,20 @@
         for (const item of items) {
           const row = document.createElement("tr");
 
-          row.appendChild(createCell(item.key));
-          row.appendChild(createCell(item.display_name));
-
-          const logoCell = document.createElement("td");
+          const nameCell = document.createElement("td");
+          const nameLink = document.createElement("a");
+          nameLink.href = `/templates/${item.key}.mcp.json`;
+          nameLink.textContent = item.display_name || item.key || "";
+          nameCell.appendChild(nameLink);
           if (item.logo) {
             const img = document.createElement("img");
             img.className = "logo";
             img.src = item.logo;
             img.alt = item.key || "logo";
-
-            const link = document.createElement("a");
-            link.href = item.logo;
-            link.textContent = item.logo;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-
-            logoCell.appendChild(img);
-            logoCell.appendChild(link);
+            nameCell.insertBefore(img, nameLink);
           }
-          row.appendChild(logoCell);
+          row.appendChild(nameCell);
 
-          row.appendChild(createCell(item.description));
           row.appendChild(createCell(item.category));
 
           const homepageCell = document.createElement("td");
@@ -197,13 +187,14 @@
             homepageCell.appendChild(link);
           }
           row.appendChild(homepageCell);
+          row.appendChild(createCell(item.description));
 
           body.appendChild(row);
         }
 
         status.textContent = `Loaded ${items.length} items from index.json.`;
       } catch (error) {
-        body.innerHTML = "<tr><td colspan=\"6\">Failed to load index.json.</td></tr>";
+        body.innerHTML = "<tr><td colspan=\"4\">Failed to load index.json.</td></tr>";
         status.textContent = String(error);
       }
     }
